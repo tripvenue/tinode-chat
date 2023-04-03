@@ -290,7 +290,10 @@ var Users UsersPersistenceInterface
 // Create inserts User object into a database, updates creation time and assigns UID
 func (usersMapper) Create(user *types.User, private interface{}) (*types.User, error) {
 
-	user.SetUid(Store.GetUid())
+	if user.Uid().UserId() == "" {
+		user.SetUid(Store.GetUid())
+	}
+
 	user.InitTimes()
 
 	err := adp.UserCreate(user)

@@ -201,7 +201,16 @@ func serveWebSocket(wrt http.ResponseWriter, req *http.Request) {
 		sess.remoteAddr = req.RemoteAddr
 	}
 
-	logs.Info.Println("ws: session started", sess.sid, sess.remoteAddr, count)
+	if sess.tenant == "" {
+		sess.tenant = getTenantUuid(req)
+
+		if sess.tenant == "" {
+			// TODO I hardcoded the test tenant uuid until UI will pass it in connection string.
+			sess.tenant = "2a46f04b-c202-4966-b15c-c1dda2e27d3d"
+		}
+	}
+
+	logs.Info.Println("ws: session started", sess.sid, sess.remoteAddr, sess.tenant, count)
 
 	// Do work in goroutines to return from serveWebSocket() to release file pointers.
 	// Otherwise "too many open files" will happen.

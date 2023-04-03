@@ -82,6 +82,9 @@ type Session struct {
 	multi        *Session
 	proxiedTopic string
 
+	// Tenant UUID
+	tenant string
+
 	// IP address of the client. For long polling this is the IP of the last poll.
 	remoteAddr string
 

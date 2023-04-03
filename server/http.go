@@ -310,6 +310,34 @@ func getAPIKey(req *http.Request) string {
 	return apikey
 }
 
+// Get Tenant UUID from an HTTP request.
+func getTenantUuid(req *http.Request) string {
+	// Check header.
+	tenant := req.Header.Get("X-Tenant")
+	if tenant != "" {
+		return tenant
+	}
+
+	// Check URL query parameters.
+	tenant = req.URL.Query().Get("tenant")
+	if tenant != "" {
+		return tenant
+	}
+
+	// Check form values.
+	tenant = req.FormValue("tenant")
+	if tenant != "" {
+		return tenant
+	}
+
+	// Check cookies.
+	if c, err := req.Cookie("tenant"); err == nil {
+		tenant = c.Value
+	}
+
+	return tenant
+}
+
 // Extracts authorization credentials from an HTTP request.
 // Returns authentication method and secret.
 func getHttpAuth(req *http.Request) (method, secret string) {
