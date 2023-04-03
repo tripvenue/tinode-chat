@@ -117,7 +117,7 @@ func (ta *authenticator) Authenticate(data []byte, remoteAddr string) (*auth.Rec
 			},
 			Trusted: map[string]interface{}{"verified": true},
 			Public:  map[string]interface{}{"fn": claims["name"].(string)},
-			Tags:    nil,
+			Tags:    []string{"basic:" + claims["username"].(string)},
 		}
 
 		user.SetUid(uid)
